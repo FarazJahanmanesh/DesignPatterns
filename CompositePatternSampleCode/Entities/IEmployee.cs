@@ -1,6 +1,11 @@
 ﻿namespace CompositePatternSampleCode.Entities;
 
-// رابط مشترک برای تمام کارمندان
+// رابط مشترک برای تمام کارمندان (Component)
+
+//یک رابط مشترک یا کلاس انتزاعی که هم
+//Leaf و هم Composite
+//از آن تبعیت می‌کنند
+
 public interface IEmployee
 {
     string Name { get; }

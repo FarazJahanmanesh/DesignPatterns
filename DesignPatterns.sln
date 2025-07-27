@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompositePatternDocument", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompositePatternSampleCodeRestaurant", "CompositePatternSampleCodeRestaurant\CompositePatternSampleCodeRestaurant.csproj", "{194ECC62-AFD5-445C-ACAA-964D96E02AB4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompositePatternSampleCodeSecondRestaurant", "CompositePatternSampleCodeSecondRestaurant\CompositePatternSampleCodeSecondRestaurant.csproj", "{73F110E5-89AB-4C08-9932-D8B81C942B2B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,10 @@ Global
 		{194ECC62-AFD5-445C-ACAA-964D96E02AB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{194ECC62-AFD5-445C-ACAA-964D96E02AB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{194ECC62-AFD5-445C-ACAA-964D96E02AB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73F110E5-89AB-4C08-9932-D8B81C942B2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73F110E5-89AB-4C08-9932-D8B81C942B2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73F110E5-89AB-4C08-9932-D8B81C942B2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73F110E5-89AB-4C08-9932-D8B81C942B2B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -49,6 +55,7 @@ Global
 		{C7A6ABEA-5694-4C5A-8EE9-DBF4A326B245} = {F9C8DBE4-81CC-49CA-A1C1-D8028A04F8CA}
 		{AE041FF3-B7A0-49DB-A295-388587800F2C} = {43DF9173-9181-48C9-8413-9595A5B8A623}
 		{194ECC62-AFD5-445C-ACAA-964D96E02AB4} = {F9C8DBE4-81CC-49CA-A1C1-D8028A04F8CA}
+		{73F110E5-89AB-4C08-9932-D8B81C942B2B} = {F9C8DBE4-81CC-49CA-A1C1-D8028A04F8CA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {279FD1DF-2AC5-4B17-952D-23507D96841A}

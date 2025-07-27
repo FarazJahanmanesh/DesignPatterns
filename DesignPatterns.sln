@@ -10,9 +10,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CompositePattern", "CompositePattern", "{EE717CF5-86B7-4D9B-8811-0C0ED0906DEF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{43DF9173-9181-48C9-8413-9595A5B8A623}"
-	ProjectSection(SolutionItems) = preProject
-		TextFile1.txt = TextFile1.txt
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{F9C8DBE4-81CC-49CA-A1C1-D8028A04F8CA}"
 EndProject

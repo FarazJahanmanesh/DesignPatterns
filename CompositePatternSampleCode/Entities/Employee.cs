@@ -1,6 +1,10 @@
 ﻿namespace CompositePatternSampleCode.Entities;
 
-// کارمند ساده (برگ)
+// کارمند ساده (Leaf)
+
+//یک کلاس که فرزند ندارد
+//و عملیات را فقط برای خودش انجام می‌دهد
+
 public class Employee : IEmployee
 {
     public string Name { get; }

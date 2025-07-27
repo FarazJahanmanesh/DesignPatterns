@@ -1,6 +1,10 @@
 ﻿namespace CompositePatternSampleCode.Entities;
 
-// مدیر (کامپوزیت)
+// مدیر (Composite)
+
+//یک کلاس که فرزندانی از نوع
+//Component را نگه می‌دارد
+//و عملیات را با استفاده از آن‌ها اجرا می‌کند
 
 public class Manager : IEmployee
 {

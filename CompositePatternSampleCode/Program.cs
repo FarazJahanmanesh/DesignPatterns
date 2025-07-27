@@ -1,6 +1,7 @@
 ﻿using CompositePatternSampleCode.Entities;
 using SRP = CompositePatternSampleCode.CombineWithSolid.SingleResponsibilityPrinciple;
 using OCP = CompositePatternSampleCode.CombineWithSolid.OpenClosedPrinciple;
+using LSP = CompositePatternSampleCode.CombineWithSolid.LiskovSubstitutionPrinciple;
 namespace CompositePatternSampleCode;
 
 class Program
@@ -111,5 +112,59 @@ class Program
 
         Console.WriteLine("\nTotal Company Salary: " + ceoOCP.CalculateTotalSalary().ToString("C"));
 
+
+
+        /////////Solid ==> L
+
+        // 🔹 ساخت کارمندهای ساده (Leaf)
+        LSP.IEmployee dev1LSP = new LSP.Employee("Reza Eilka", "Senior Developer", 150_000_000);
+        LSP.IEmployee dev2LSP = new LSP.Employee("Faraz JahanManesh", "Developer", 1_000);
+        LSP.IEmployee seLSP = new LSP.Employee("Poryia Karimi", "Software Engineer", 150_000_000);
+        LSP.IEmployee accLSP = new LSP.Employee("Asad Ahmadi", "Accountant", 180_000_000);
+        LSP.IEmployee designerLSP = new LSP.Employee("Poryia Karimi", "UI/UX Designer", 150_000_000);
+
+        // 🔹 ساخت مدیرها (Composite)
+        LSP.Manager techLeadLSP = new LSP.Manager("Erfan Darvishian", "Technical Lead", 200_000_000);
+        LSP.Manager financeManagerLSP = new LSP.Manager("Mohammad Javad Hoshmandan", "Finance Manager", 200_000_000);
+        LSP.Manager ctoLSP = new LSP.Manager("Ali Masaeli", "Chief Technology Officer", 300_000_000);
+        LSP.Manager ceoLSP = new LSP.Manager("Akbar Azad", "Chief Executive Officer", 500_000_000);
+
+        // 🔹 ایجاد ساختار سلسله‌مراتبی
+        techLeadLSP.AddSubordinate(dev1LSP);
+        techLeadLSP.AddSubordinate(dev2LSP);
+        techLeadLSP.AddSubordinate(seLSP);
+
+        financeManagerLSP.AddSubordinate(accLSP);
+
+        ctoLSP.AddSubordinate(techLeadLSP);
+        ctoLSP.AddSubordinate(designerLSP);
+
+        ceoLSP.AddSubordinate(ctoLSP);
+        ceoLSP.AddSubordinate(financeManagerLSP);
+
+        Console.WriteLine("Organizational Structure (LSP):\n");
+        DisplayEmployeeHierarchy(ceoLSP);
+
+        Console.WriteLine("\nTotal Company Salary: " + ceoLSP.CalculateTotalSalary().ToString("C"));
+
+        Console.WriteLine("\nCTO's Subordinates:");
+        foreach (var sub in ctoLSP.GetSubordinates())
+        {
+            Console.WriteLine($"- {sub.Name} ({sub.Position})");
+        }
+
+        Console.WriteLine("\nSubordinates of a simple Employee:");
+        foreach (var sub in dev1LSP.GetSubordinates()) 
+        {
+            Console.WriteLine($"- {sub.Name} ({sub.Position})");
+        }
+    }
+    static void DisplayEmployeeHierarchy(LSP.IEmployee employee, int depth = 0)
+    {
+        Console.WriteLine($"{new string(' ', depth * 4)}- {employee.Name} ({employee.Position}): {employee.Salary:C}");
+        foreach (var sub in employee.GetSubordinates())
+        {
+            DisplayEmployeeHierarchy(sub, depth + 1);
+        }
     }
 }

@@ -1,5 +1,6 @@
-﻿using SRP = CompositePatternSampleCode.CombineWithSolid.SingleResponsibilityPrinciple;
-using CompositePatternSampleCode.Entities;
+﻿using CompositePatternSampleCode.Entities;
+using SRP = CompositePatternSampleCode.CombineWithSolid.SingleResponsibilityPrinciple;
+using OCP = CompositePatternSampleCode.CombineWithSolid.OpenClosedPrinciple;
 namespace CompositePatternSampleCode;
 
 class Program
@@ -40,7 +41,7 @@ class Program
         Console.WriteLine("\nTotal Company Salary: " + ceo.CalculateTotalSalary().ToString("C"));
 
 
-        /////////solid ==> S
+        /////////Solid ==> S
 
         SRP.IEmployee dev1SRP = new SRP.Employee("Reza Eilka", "Senior Developer", 150_000_000);
         SRP.IEmployee dev2SRP = new SRP.Employee("Faraz JahanManesh", "Developer", 1_000);
@@ -74,7 +75,41 @@ class Program
         Console.WriteLine("\nTotal Company Salary: " + ceoSRP.CalculateTotalSalary().ToString("C"));
 
 
+        /////////Solid ==> O
 
+        OCP.IEmployee dev1OCP = new OCP.Employee("Reza Eilka", "Senior Developer", 150_000_000);
+        OCP.IEmployee dev2OCP = new OCP.Employee("Faraz JahanManesh", "Developer", 1_000);
+        OCP.IEmployee seOCP = new OCP.Employee("Poryia Karimi", "Software engineer", 150_000_000);
+        OCP.IEmployee accOCP = new OCP.Employee("Asad Ahmadi", "Accountant", 180_000_000);
+        OCP.IEmployee designerOCP = new OCP.Employee("Poryia Karimi", "UI/UX Designer", 150_000_000);
+
+        OCP.Manager techLeadOCP = new OCP.Manager("Erfan Darvishian", "Technical Lead", 200_000_000);
+        OCP.Manager financeManagerOCP = new OCP.Manager("Mohammad Javad Hoshmandan", "Finance Manager", 200_000_000);
+        OCP.Manager ctoOCP = new OCP.Manager("Ali Masaeli", "Chief Technology Officer", 300_000_000);
+        OCP.Manager ceoOCP = new OCP.Manager("Akbar Azad", "Chief Executive Officer", 500_000_000);
+
+        // ساختاردهی
+        techLeadOCP.AddSubordinate(dev1OCP);
+        techLeadOCP.AddSubordinate(dev2OCP);
+        techLeadOCP.AddSubordinate(seOCP);
+
+        financeManagerOCP.AddSubordinate(accOCP);
+
+        ctoOCP.AddSubordinate(techLeadOCP);
+        ctoOCP.AddSubordinate(designerOCP);
+
+        ceoOCP.AddSubordinate(ctoOCP);
+        ceoOCP.AddSubordinate(financeManagerOCP);
+
+        // انتخاب نوع نمایش
+        OCP.IEmployeePrinter printerOCP = new OCP.ConsoleEmployeePrinter();
+        printerOCP.Print(ceoOCP);
+
+        Console.WriteLine("\n----- نمایش JSON -----\n");
+        OCP.IEmployeePrinter jsonPrinter = new OCP.JsonEmployeePrinter();
+        jsonPrinter.Print(ceoOCP);
+
+        Console.WriteLine("\nTotal Company Salary: " + ceoOCP.CalculateTotalSalary().ToString("C"));
 
     }
 }

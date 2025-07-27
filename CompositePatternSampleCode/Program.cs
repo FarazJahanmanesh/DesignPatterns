@@ -3,6 +3,7 @@ using ISP = CompositePatternSampleCode.CombineWithSolid.InterfaceSegregationPrin
 using LSP = CompositePatternSampleCode.CombineWithSolid.LiskovSubstitutionPrinciple;
 using OCP = CompositePatternSampleCode.CombineWithSolid.OpenClosedPrinciple;
 using SRP = CompositePatternSampleCode.CombineWithSolid.SingleResponsibilityPrinciple;
+using DIP = CompositePatternSampleCode.CombineWithSolid.DependencyInversionPrinciple;
 namespace CompositePatternSampleCode;
 
 class Program
@@ -43,7 +44,7 @@ class Program
         Console.WriteLine("\nTotal Company Salary: " + ceo.CalculateTotalSalary().ToString("C"));
 
 
-        Console.WriteLine("--------------------------------------------------------------");
+        Console.WriteLine("-------------------------------------------------------------- SingleResponsibilityPrinciple Sample");
         /////////Solid ==> S
 
         SRP.IEmployee dev1SRP = new SRP.Employee("Reza Eilka", "Senior Developer", 150_000_000);
@@ -78,7 +79,7 @@ class Program
         Console.WriteLine("\nTotal Company Salary: " + ceoSRP.CalculateTotalSalary().ToString("C"));
 
 
-        Console.WriteLine("--------------------------------------------------------------");
+        Console.WriteLine("-------------------------------------------------------------- OpenClosedPrinciple Sample");
         /////////Solid ==> O
 
         OCP.IEmployee dev1OCP = new OCP.Employee("Reza Eilka", "Senior Developer", 150_000_000);
@@ -116,7 +117,7 @@ class Program
         Console.WriteLine("\nTotal Company Salary: " + ceoOCP.CalculateTotalSalary().ToString("C"));
 
 
-        Console.WriteLine("--------------------------------------------------------------");
+        Console.WriteLine("-------------------------------------------------------------- LiskovSubstitutionPrinciple Sample");
         /////////Solid ==> L
 
         // 🔹 ساخت کارمندهای ساده (Leaf)
@@ -163,8 +164,8 @@ class Program
         }
 
 
-        Console.WriteLine("--------------------------------------------------------------");
-        /////////Solid ==> i
+        Console.WriteLine("-------------------------------------------------------------- InterfaceSegregationPrinciple Sample");
+        /////////Solid ==> I
 
         // 🔹 ساخت کارمندهای ساده (Leaf)
         ISP.IEmployeeBase dev1ISP = new ISP.Employee("Reza Eilka", "Senior Developer", 150_000_000);
@@ -223,6 +224,49 @@ class Program
         {
             Console.WriteLine("No subordinates.");
         }
+
+
+
+        Console.WriteLine("-------------------------------------------------------------- DependencyInversionPrinciple Sample");
+        /////////Solid ==> D
+
+        // 🔹 همه جا از Interfaceها استفاده می‌کنیم
+        DIP.IEmployeeBase dev1DIP = new DIP.Employee("Reza Eilka", "Senior Developer", 150_000_000);
+        DIP.IEmployeeBase dev2DIP = new DIP.Employee("Faraz JahanManesh", "Developer", 1_000);
+        DIP.IEmployeeBase seDIP = new DIP.Employee("Poryia Karimi", "Software Engineer", 150_000_000);
+        DIP.IEmployeeBase accDIP = new DIP.Employee("Asad Ahmadi", "Accountant", 180_000_000);
+        DIP.IEmployeeBase designerDIP = new DIP.Employee("Poryia Karimi", "UI/UX Designer", 150_000_000);
+
+        DIP.IManageSubordinates techLeadDIP = new DIP.Manager("Erfan Darvishian", "Technical Lead", 200_000_000);
+        DIP.IManageSubordinates financeManagerDIP = new DIP.Manager("Mohammad Javad Hoshmandan", "Finance Manager", 200_000_000);
+        DIP.IManageSubordinates ctoDIP = new DIP.Manager("Ali Masaeli", "Chief Technology Officer", 300_000_000);
+        DIP.IManageSubordinates ceoDIP = new DIP.Manager("Akbar Azad", "Chief Executive Officer", 500_000_000);
+
+        // 🔹 ساختاردهی بدون اینکه به کلاس‌ها بچسبیم
+        techLeadDIP.AddSubordinate(dev1DIP);
+        techLeadDIP.AddSubordinate(dev2DIP);
+        techLeadDIP.AddSubordinate(seDIP);
+
+        financeManagerDIP.AddSubordinate(accDIP);
+
+        ctoDIP.AddSubordinate((DIP.IEmployeeBase)techLeadDIP);
+        ctoDIP.AddSubordinate(designerDIP);
+
+        ceoDIP.AddSubordinate((DIP.IEmployeeBase)ctoDIP);
+        ceoDIP.AddSubordinate((DIP.IEmployeeBase)financeManagerDIP);
+
+        // 🔹 حالا چاپگر رو از بیرون تزریق می‌کنیم
+        DIP.IEmployeePrinter printerDIP = new DIP.ConsoleEmployeePrinter();
+        printerDIP.Print((DIP.IEmployeeBase)ceoDIP);
+
+        Console.WriteLine("\n----- JSON Output -----\n");
+        DIP.IEmployeePrinter jsonPrinterDIP = new DIP.JsonEmployeePrinter();
+        jsonPrinterDIP.Print((DIP.IEmployeeBase)ceoDIP);
+
+        // 🔹 محاسبه کل حقوق
+        Console.WriteLine("\nTotal Company Salary: " +
+            ((DIP.IEmployeeBase)ceoDIP).CalculateTotalSalary().ToString("C"));
+
     }
     static void DisplayEmployeeHierarchy(LSP.IEmployee employee, int depth = 0)
     {

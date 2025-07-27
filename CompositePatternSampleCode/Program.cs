@@ -1,7 +1,8 @@
 ﻿using CompositePatternSampleCode.Entities;
-using SRP = CompositePatternSampleCode.CombineWithSolid.SingleResponsibilityPrinciple;
-using OCP = CompositePatternSampleCode.CombineWithSolid.OpenClosedPrinciple;
+using ISP = CompositePatternSampleCode.CombineWithSolid.InterfaceSegregationPrinciple;
 using LSP = CompositePatternSampleCode.CombineWithSolid.LiskovSubstitutionPrinciple;
+using OCP = CompositePatternSampleCode.CombineWithSolid.OpenClosedPrinciple;
+using SRP = CompositePatternSampleCode.CombineWithSolid.SingleResponsibilityPrinciple;
 namespace CompositePatternSampleCode;
 
 class Program
@@ -42,6 +43,7 @@ class Program
         Console.WriteLine("\nTotal Company Salary: " + ceo.CalculateTotalSalary().ToString("C"));
 
 
+        Console.WriteLine("--------------------------------------------------------------");
         /////////Solid ==> S
 
         SRP.IEmployee dev1SRP = new SRP.Employee("Reza Eilka", "Senior Developer", 150_000_000);
@@ -76,6 +78,7 @@ class Program
         Console.WriteLine("\nTotal Company Salary: " + ceoSRP.CalculateTotalSalary().ToString("C"));
 
 
+        Console.WriteLine("--------------------------------------------------------------");
         /////////Solid ==> O
 
         OCP.IEmployee dev1OCP = new OCP.Employee("Reza Eilka", "Senior Developer", 150_000_000);
@@ -113,7 +116,7 @@ class Program
         Console.WriteLine("\nTotal Company Salary: " + ceoOCP.CalculateTotalSalary().ToString("C"));
 
 
-
+        Console.WriteLine("--------------------------------------------------------------");
         /////////Solid ==> L
 
         // 🔹 ساخت کارمندهای ساده (Leaf)
@@ -158,6 +161,68 @@ class Program
         {
             Console.WriteLine($"- {sub.Name} ({sub.Position})");
         }
+
+
+        Console.WriteLine("--------------------------------------------------------------");
+        /////////Solid ==> i
+
+        // 🔹 ساخت کارمندهای ساده (Leaf)
+        ISP.IEmployeeBase dev1ISP = new ISP.Employee("Reza Eilka", "Senior Developer", 150_000_000);
+        ISP.IEmployeeBase dev2ISP = new ISP.Employee("Faraz JahanManesh", "Developer", 1_000);
+        ISP.IEmployeeBase seISP = new ISP.Employee("Poryia Karimi", "Software Engineer", 150_000_000);
+        ISP.IEmployeeBase accISP = new ISP.Employee("Asad Ahmadi", "Accountant", 180_000_000);
+        ISP.IEmployeeBase designerISP = new ISP.Employee("Poryia Karimi", "UI/UX Designer", 150_000_000);
+
+        // 🔹 ساخت مدیرها (Composite)
+        ISP.Manager techLeadISP = new ISP.Manager("Erfan Darvishian", "Technical Lead", 200_000_000);
+        ISP.Manager financeManagerISP = new ISP.Manager("Mohammad Javad Hoshmandan", "Finance Manager", 200_000_000);
+        ISP.Manager ctoISP = new ISP.Manager("Ali Masaeli", "Chief Technology Officer", 300_000_000);
+        ISP.Manager ceoISP = new ISP.Manager("Akbar Azad", "Chief Executive Officer", 500_000_000);
+
+        // 🔹 ایجاد ساختار سلسله‌مراتبی (از طریق IManageSubordinates)
+        ISP.IManageSubordinates techLeadManager = techLeadISP;
+        techLeadManager.AddSubordinate(dev1ISP);
+        techLeadManager.AddSubordinate(dev2ISP);
+        techLeadManager.AddSubordinate(seISP);
+
+        ISP.IManageSubordinates financeManager2 = financeManagerISP;
+        financeManager2.AddSubordinate(accISP);
+
+        ISP.IManageSubordinates ctoManager = ctoISP;
+        ctoManager.AddSubordinate(techLeadISP);
+        ctoManager.AddSubordinate(designerISP);
+
+        ISP.IManageSubordinates ceoManager = ceoISP;
+        ceoManager.AddSubordinate(ctoISP);
+        ceoManager.AddSubordinate(financeManagerISP);
+
+        // ✅ نمایش ساختار سازمانی
+        Console.WriteLine("Organizational Structure (ISP):\n");
+        DisplayEmployeeHierarchyISP(ceoISP);
+
+        // ✅ محاسبه کل حقوق شرکت
+        Console.WriteLine("\nTotal Company Salary: " + ceoISP.CalculateTotalSalary().ToString("C"));
+
+        // ✅ دسترسی به زیرمجموعه‌ها (از طریق IManageSubordinates)
+        Console.WriteLine("\nCTO's Subordinates:");
+        foreach (var sub in ctoManager.GetSubordinates())
+        {
+            Console.WriteLine($"- {sub.Name} ({sub.Position})");
+        }
+
+        Console.WriteLine("\nSubordinates of a simple Employee:");
+        // چون Employee ساده زیرمجموعه ندارد، فقط به IEmployeeBase دسترسی دارد، پس باید چک کنیم:
+        if (dev1ISP is ISP.IManageSubordinates dev1Manager)
+        {
+            foreach (var sub in dev1Manager.GetSubordinates())
+            {
+                Console.WriteLine($"- {sub.Name} ({sub.Position})");
+            }
+        }
+        else
+        {
+            Console.WriteLine("No subordinates.");
+        }
     }
     static void DisplayEmployeeHierarchy(LSP.IEmployee employee, int depth = 0)
     {
@@ -165,6 +230,20 @@ class Program
         foreach (var sub in employee.GetSubordinates())
         {
             DisplayEmployeeHierarchy(sub, depth + 1);
+        }
+    }
+    static void DisplayEmployeeHierarchyISP(ISP.IEmployeeBase employee, int depth = 0)
+    {
+        // نمایش اطلاعات کارمند فعلی
+        Console.WriteLine($"{new string(' ', depth * 4)}- {employee.Name} ({employee.Position}): {employee.Salary:C}");
+
+        // اگر این کارمند زیرمجموعه‌پذیر بود (Composite)
+        if (employee is ISP.IManageSubordinates manager)
+        {
+            foreach (var sub in manager.GetSubordinates())
+            {
+                DisplayEmployeeHierarchyISP(sub, depth + 1);
+            }
         }
     }
 }
